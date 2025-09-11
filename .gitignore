@@ -4,3 +4,4 @@ build/*
 !build/.gitkeep
 .env
 nvme_*.txt
+AGENTS.md

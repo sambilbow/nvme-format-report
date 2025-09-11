@@ -1,2 +1,14 @@
-reportlab>=4.0.0,<4.2.0
-python-dotenv
+# Core dependencies
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# PDF generation
+reportlab>=4.0.0
+
+# System utilities
+psutil>=5.9.0
+
+# Development
+pytest>=7.0.0
+black>=23.0.0
+flake8>=6.0.0

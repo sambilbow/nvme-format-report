@@ -1,19 +1,26 @@
 [env]
 _.python.venv = { path = ".venv", create = true }
 
-[tasks.setup]
-description = "Setup environment and install dependencies"
-run = "cp .env.example .env && ${EDITOR:-nano} .env && echo 'Installing dependencies...' && pip install -r requirements.txt && echo 'Setup complete!'"
+[tasks.00-dev]
+run = "python -m src.main"
+description = "Run the main entry point for development/testing"
 
-[tasks.install]
-description = "Install pip requirements"
-run = "pip install -r requirements.txt"
+[tasks.01-setup]
+run = "pip install -r requirements.txt && cp env.template .env && ${EDITOR:-nano} .env"
+description = "Install dependencies, setup environment, and open .env for editing"
 
+[tasks.02-collect]
+run = "python -m src.collect"
+description = "Collect NVMe device information and update state"
 
-[tasks.collect]
-description = "Collect device info and create execution plan (Phase 1)"
-run = "sudo scripts/collect_and_plan.sh"
+[tasks.03-plan]
+run = "python -m src.plan"
+description = "Create an execution plan for the NVMe wipe based on collected info"
 
-[tasks.execute]
-description = "Execute erase and generate reports (Phase 2)"
-run = "sudo scripts/execute_and_report.sh"
+[tasks.04-execute]
+run = "python -m src.execute"
+description = "Execute the NVMe wipe according to the plan"
+
+[tasks.05-report]
+run = "python -m src.report"
+description = "Generate a report (PDF/JSON) from the results of the wipe"
