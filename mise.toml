@@ -1,0 +1,19 @@
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.setup]
+description = "Setup environment and install dependencies"
+run = "cp .env.example .env && ${EDITOR:-nano} .env && echo 'Installing dependencies...' && pip install -r requirements.txt && echo 'Setup complete!'"
+
+[tasks.install]
+description = "Install pip requirements"
+run = "pip install -r requirements.txt"
+
+
+[tasks.collect]
+description = "Collect device info and create execution plan (Phase 1)"
+run = "sudo scripts/collect_and_plan.sh"
+
+[tasks.execute]
+description = "Execute erase and generate reports (Phase 2)"
+run = "sudo scripts/execute_and_report.sh"
