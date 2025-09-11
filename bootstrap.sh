@@ -32,7 +32,7 @@ echo "Sourcing bashrc"
 source ~/.bashrc
 
 mise install python
-mise use --global python@latest
+mise use --global python
 
 echo "✅ Mise installation completed"
 
