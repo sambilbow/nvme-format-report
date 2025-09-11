@@ -31,8 +31,8 @@ curl https://mise.run/bash | sh
 echo "Sourcing bashrc"
 source ~/.bashrc
 
-mise install python
-mise use --global python
+$HOME/.local/bin/mise install python
+$HOME/.local/bin/mise use --global python
 
 echo "✅ Mise installation completed"
 
