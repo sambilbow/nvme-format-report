@@ -31,15 +31,19 @@ curl https://mise.run/bash | sh
 echo "Sourcing bashrc"
 source ~/.bashrc
 
+mise install python
+mise use --global python@latest
+
 echo "✅ Mise installation completed"
 
 # Clone the repository
 echo "📁 Cloning repository..."
 echo "Cloning from https://github.com/sambilbow/nvme-format-report.git"
 git clone https://github.com/sambilbow/nvme-format-report.git
-cd nvme-format-report
+
 echo "✅ Bootstrap completed successfully!"
-echo "📁 You are now in: $(pwd)"
 echo "🔧 Next steps:"
-echo "   1. Run: mise run setup"
-echo "   2. Follow the workflow in the README"
+echo "   1. exec bash"
+echo "   2. cd nvme-format-report"
+echo "   3. Run: mise run setup"
+echo "   4. Follow the workflow in the README"
