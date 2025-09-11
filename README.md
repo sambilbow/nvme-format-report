@@ -29,14 +29,8 @@ curl -fsSL https://raw.githubusercontent.com/sambilbow/nvme-format-report/main/b
 ### Usage
 
 ```bash
-# Run complete workflow
-mise dev
-
-# Or run individual phases
-mise collect  # Gather device information
-mise plan     # Create execution plan
-mise execute  # Perform wipe operation
-mise report   # Generate reports
+# Choose workflow or individual steps
+mise run
 ```
 
 ## Workflow

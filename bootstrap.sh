@@ -18,8 +18,8 @@ echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *
 echo "Updating package lists"
 sudo apt update
 
-echo "Installing packages: gum curl git"
-sudo apt install -y gum curl git
+echo "Installing packages: gum curl git nvme-cli"
+sudo apt install -y gum curl git nvme-cli
 
 echo "✅ Gum installation completed"
 
@@ -46,5 +46,4 @@ echo "✅ Bootstrap completed successfully!"
 echo "🔧 Next steps:"
 echo "   1. exec bash"
 echo "   2. cd nvme-format-report"
-echo "   3. Run: mise run setup"
-echo "   4. Follow the workflow in the README"
+echo "   3. mise trust
