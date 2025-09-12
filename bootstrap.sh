@@ -45,6 +45,6 @@ git clone https://github.com/sambilbow/nvme-format-report.git
 echo "✅ Bootstrap completed successfully!"
 echo "🔧 Next steps:"
 echo "   1. exec bash"
-echo "   2. cd nvme-format-report"
-echo "   3. mise trust"
+echo "   2. mise trust nvme-format-report/mise.toml"
+echo "   3. cd nvme-format-report"
 echo "   4. mise run"
