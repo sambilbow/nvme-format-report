@@ -51,8 +51,8 @@ class ReportGenerator:
         if not all([collect_data, plan_data, execute_data]):
             raise ValueError("Missing required phase data. Ensure all phases completed successfully.")
         
-        # Create timestamp for file naming
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        # Create timestamp for file naming (with timezone)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%Z")
         
         # Generate JSON report
         json_path = self._generate_json_report(collect_data, plan_data, execute_data, timestamp)
@@ -106,8 +106,14 @@ class ReportGenerator:
         pdf_path = self.report_dir / pdf_filename
         pdf_path.parent.mkdir(exist_ok=True)
         
-        # Create PDF document
-        doc = SimpleDocTemplate(str(pdf_path), pagesize=letter)
+        # Create PDF document with metadata
+        doc = SimpleDocTemplate(
+            str(pdf_path), 
+            pagesize=letter,
+            title=f"NVMe Wipe Report - {device['model']}",
+            author=self.business_info['technician_name'],
+            subject="NVMe Device Secure Wipe Report"
+        )
         story = []
         styles = getSampleStyleSheet()
         

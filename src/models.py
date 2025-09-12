@@ -27,7 +27,7 @@ class EraseOperation(BaseModel):
 
     model_config = {
         "json_encoders": {
-            datetime: lambda v: v.isoformat()
+            datetime: lambda v: v.isoformat() + "Z" if v.tzinfo is None else v.isoformat()
         }
     }
 
