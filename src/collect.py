@@ -20,29 +20,21 @@ class DeviceCollector:
     def list_nvme_devices(self) -> List[str]:
         """List all available NVMe devices."""
         try:
-            print("DEBUG: Running ls /dev/nvme* command...")
             result = subprocess.run(
                 ["ls", "/dev/nvme*"], 
                 capture_output=True, 
                 text=True, 
-                check=True
+                check=True,
+                shell=True
             )
-            print(f"DEBUG: ls command return code: {result.returncode}")
-            print(f"DEBUG: ls command stdout: '{result.stdout}'")
-            print(f"DEBUG: ls command stderr: '{result.stderr}'")
             
             # Split by whitespace and newlines to handle all possible formats
             devices = result.stdout.split()
             # Filter to only device files (not partitions or controllers)
             # Match pattern: /dev/nvme[number]n[number] (e.g., /dev/nvme0n1)
             nvme_devices = [d for d in devices if re.match(r'/dev/nvme\d+n\d+$', d)]
-            print(f"DEBUG: All nvme files found: {devices}")
-            print(f"DEBUG: Filtered nvme devices: {nvme_devices}")
             return nvme_devices
-        except subprocess.CalledProcessError as e:
-            print(f"DEBUG: ls command failed with error: {e}")
-            print(f"DEBUG: Return code: {e.returncode}")
-            print(f"DEBUG: stderr: {e.stderr}")
+        except subprocess.CalledProcessError:
             return []
     
     def get_device_info(self, device_path: str) -> Optional[DeviceInfo]:
