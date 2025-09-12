@@ -120,8 +120,58 @@ class ReportGenerator:
             alignment=1  # Center
         )
         story.append(Paragraph("NVMe Device Wipe Report", title_style))
-        story.append(Spacer(1, 20))
         
+        # Add device summary information
+        device = collect_data["devices"][0]
+        execution_results = execute_data["erase_operation"]
+        verification_results = execute_data.get("verification", {})
+        
+        # Serial Number
+        serial_style = ParagraphStyle(
+            'SerialNumber',
+            parent=styles['Normal'],
+            fontSize=12,
+            spaceAfter=6,
+            alignment=1  # Center
+        )
+        story.append(Paragraph(f"Serial Number: {device['serial']}", serial_style))
+        
+        # Description
+        desc_style = ParagraphStyle(
+            'Description',
+            parent=styles['Normal'],
+            fontSize=12,
+            spaceAfter=6,
+            alignment=1  # Center
+        )
+        story.append(Paragraph(f"Description: {device.get('description', 'N/A')}", desc_style))
+        
+        # Wipe Success
+        wipe_status = "YES" if execution_results["status"] == "completed" else "NO"
+        wipe_color = colors.green if execution_results["status"] == "completed" else colors.red
+        wipe_style = ParagraphStyle(
+            'WipeStatus',
+            parent=styles['Normal'],
+            fontSize=12,
+            spaceAfter=6,
+            alignment=1,  # Center
+            textColor=wipe_color
+        )
+        story.append(Paragraph(f"Wipe Success: {wipe_status}", wipe_style))
+        
+        # Verification Success
+        verif_status = "YES" if verification_results.get("success", False) and verification_results.get("wipe_effective", False) else "NO"
+        verif_color = colors.green if verif_status == "YES" else colors.red
+        verif_style = ParagraphStyle(
+            'VerificationStatus',
+            parent=styles['Normal'],
+            fontSize=12,
+            spaceAfter=20,
+            alignment=1,  # Center
+            textColor=verif_color
+        )
+        story.append(Paragraph(f"Verification Success: {verif_status}", verif_style))
+        story.append(Spacer(1, 20))
         # Business Information
         story.append(Paragraph("Business Information", styles['Heading2']))
         business_table_data = [
