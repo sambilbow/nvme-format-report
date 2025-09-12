@@ -41,7 +41,7 @@ class StateManager:
         """Save current state to file."""
         self._state["updated_at"] = datetime.now().isoformat()
         with open(self.state_file, 'w') as f:
-            json.dump(self._state, f, indent=2)
+            json.dump(self._state, f, indent=2, default=str)
     
     def update_phase(self, phase: str, status: str, data: Optional[Dict[str, Any]] = None) -> None:
         """Update a specific phase with status and data."""
