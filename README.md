@@ -24,13 +24,16 @@ A professional tool for securely wiping NVMe devices and generating detailed rep
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sambilbow/nvme-format-report/main/bootstrap.sh | bash
+exec bash
+mise trust nvme-format-report/mise.toml
+cd nvme-format-report
+mise setup
 ```
 
 ### Usage
 
 ```bash
-# Choose workflow or individual steps
-mise run
+mise engage
 ```
 
 ## Workflow
@@ -66,14 +69,3 @@ BUSINESS_EMAIL=contact@yourcompany.com
 BUSINESS_WEBSITE=https://yourcompany.com
 TECHNICIAN_NAME=Jane Doe
 ```
-
-## Requirements
-
-- `nvme-cli` - NVMe command line tools
-- `dd` - For verification
-- `findmnt` or `mount` - For mount detection
-- `lsof` - For process detection (optional)
-
-## License
-
-[License information]
