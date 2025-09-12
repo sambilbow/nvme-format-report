@@ -10,7 +10,7 @@ run = "python -m src.main workflow"
 description = "Run the full workflow"
 
 [tasks.export]
-run = "DRIVE=$(gum choose $(lsblk -o NAME,SIZE,TYPE,MOUNTPOINT | grep -E 'disk|part' | awk '{print \"/dev/\" $1 \" (\" $2 \")\"}' | grep -v 'loop')) && sudo mkdir /mnt/usb && sudo mount $DRIVE /mnt/usb && cp build/wipe_report_*.pdf /mnt/usb && cp build/wipe_report_*.json /mnt/usb && sudo umount /mnt/usb"
+run = "DRIVE=$(gum choose $(lsblk -o NAME,SIZE,TYPE,MOUNTPOINT | grep -E 'disk|part' | awk '{print \"/dev/\" $1 \" (\" $2 \")\"}' | grep -v 'loop')) && sudo mkdir -p /mnt/usb && sudo mount $DRIVE /mnt/usb && cp build/wipe_report_*.pdf /mnt/usb && cp build/wipe_report_*.json /mnt/usb && sudo umount /mnt/usb"
 description = "Export the report to a USB drive"
 
 [tasks.cleanup]
