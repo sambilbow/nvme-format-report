@@ -67,7 +67,7 @@ class WipeExecutor:
         
         # Return execution results
         return {
-            "erase_operation": erase_operation.dict(),
+            "erase_operation": erase_operation.model_dump(),
             "command_output": result.get("output", ""),
             "command_error": result.get("error", ""),
             "execution_time": erase_operation.duration

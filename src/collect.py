@@ -20,7 +20,6 @@ class DeviceCollector:
     def list_nvme_devices(self) -> List[str]:
         """List all available NVMe devices."""
         try:
-            print("DEBUG: Running ls /dev/nvme* command...")
             result = subprocess.run(
                 "ls /dev/nvme*", 
                 capture_output=True, 
@@ -28,22 +27,14 @@ class DeviceCollector:
                 check=True,
                 shell=True
             )
-            print(f"DEBUG: ls command return code: {result.returncode}")
-            print(f"DEBUG: ls command stdout: '{result.stdout}'")
-            print(f"DEBUG: ls command stderr: '{result.stderr}'")
             
             # Split by whitespace and newlines to handle all possible formats
             devices = result.stdout.split()
             # Filter to only device files (not partitions or controllers)
             # Match pattern: /dev/nvme[number]n[number] (e.g., /dev/nvme0n1)
             nvme_devices = [d for d in devices if re.match(r'/dev/nvme\d+n\d+$', d)]
-            print(f"DEBUG: All nvme files found: {devices}")
-            print(f"DEBUG: Filtered nvme devices: {nvme_devices}")
             return nvme_devices
         except subprocess.CalledProcessError as e:
-            print(f"DEBUG: ls command failed with error: {e}")
-            print(f"DEBUG: Return code: {e.returncode}")
-            print(f"DEBUG: stderr: {e.stderr}")
             return []
     
     def get_device_info(self, device_path: str) -> Optional[DeviceInfo]:
@@ -177,7 +168,7 @@ class DeviceCollector:
         print(f"Serial: {device['serial']}")
         print(f"Capacity: {device['capacity']}")
         
-        description = input("Enter a description for this device (e.g., 'Customer laptop SSD', 'Server boot drive'): ").strip()
+        description = input("Enter a description for this device (e.g., '<product model> <serial number> <friendly name>'): ").strip()
         return description if description else f"NVMe device {device['model']}"
     
     def check_erase_support(self, device_path: str) -> Dict[str, bool]:
@@ -288,7 +279,7 @@ def main():
             if info:
                 # Check erase support
                 erase_support = collector.check_erase_support(device)
-                device_data = info.dict()
+                device_data = info.model_dump()
                 device_data["erase_support"] = erase_support
                 
                 # Prompt for device description
