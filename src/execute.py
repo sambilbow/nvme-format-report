@@ -248,7 +248,7 @@ def _run_execute_phase(executor: WipeExecutor, state_manager: StateManager):
             if "verification" in execution_results:
                 verif = execution_results["verification"]
                 if verif["success"]:
-                    print(f"✅ Verification: {'All zeros' if verif['is_all_zeros'] else 'Non-zero data found'}")
+                    print(f"✅ Verification: {verif['zero_percentage']}% zeros, {verif['expected_result']} expected")
                 else:
                     print(f"⚠️  Verification failed: {verif['error']}")
         else:

@@ -225,8 +225,10 @@ class ReportGenerator:
             verif = execute_data["verification"]
             verif_table_data = [
                 ["Verification Method:", verif.get("verification_method", "Unknown")],
-                ["Sample Size:", str(verif.get("sample_size", "Unknown"))],
-                ["All Zeros:", "Yes" if verif.get("is_all_zeros") else "No"],
+                ["Sample Size:", f"{verif.get('total_bytes', 0):,} bytes"],
+                ["Zero Percentage:", f"{verif.get('zero_percentage', 0)}%"],
+                ["Expected Result:", verif.get("expected_result", "Unknown")],
+                ["Wipe Effective:", "Yes" if verif.get("wipe_effective") else "No"],
                 ["Verification Success:", "Yes" if verif.get("success") else "No"]
             ]
             
