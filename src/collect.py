@@ -26,9 +26,14 @@ class DeviceCollector:
                 text=True, 
                 check=True
             )
-            devices = [line.strip() for line in result.stdout.split('\n') if line.strip()]
-            # Filter to only device files (not partitions)
-            return [d for d in devices if re.match(r'/dev/nvme\d+n\d+$', d)]
+            # Split by whitespace and newlines to handle all possible formats
+            devices = result.stdout.split()
+            # Filter to only device files (not partitions or controllers)
+            # Match pattern: /dev/nvme[number]n[number] (e.g., /dev/nvme0n1)
+            nvme_devices = [d for d in devices if re.match(r'/dev/nvme\d+n\d+$', d)]
+            print(f"DEBUG: All nvme files found: {devices}")
+            print(f"DEBUG: Filtered nvme devices: {nvme_devices}")
+            return nvme_devices
         except subprocess.CalledProcessError:
             return []
     
