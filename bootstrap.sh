@@ -46,4 +46,5 @@ echo "✅ Bootstrap completed successfully!"
 echo "🔧 Next steps:"
 echo "   1. exec bash"
 echo "   2. cd nvme-format-report"
-echo "   3. mise trust
+echo "   3. mise trust"
+echo "   4. mise run"

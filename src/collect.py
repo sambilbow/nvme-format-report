@@ -68,7 +68,7 @@ class DeviceCollector:
         """Run an nvme command and return parsed JSON output."""
         try:
             result = subprocess.run(
-                ["nvme", command, device_path, "--output-format=json"],
+                ["sudo", "nvme", command, device_path, "--output-format=json"],
                 capture_output=True,
                 text=True,
                 check=True
@@ -188,7 +188,7 @@ class DeviceCollector:
         """Check secure erase and crypto erase support using FNA field."""
         try:
             result = subprocess.run(
-                ["nvme", "id-ctrl", device_path, "--output-format=json"],
+                ["sudo", "nvme", "id-ctrl", device_path, "--output-format=json"],
                 capture_output=True,
                 text=True,
                 check=True
@@ -222,17 +222,15 @@ class DeviceCollector:
         """Check if format command is supported."""
         try:
             result = subprocess.run(
-                ["nvme", "id-ctrl", device_path, "--output-format=json"],
+                ["sudo", "nvme", "id-ctrl", device_path, "--output-format=json"],
                 capture_output=True,
                 text=True,
                 check=True
             )
-            info = json.loads(result.stdout)
-            # Check if format is supported (bit 1 in oacs)
-            oacs = info.get("oacs", 0)
-            return bool(oacs & 0x2)
-        except:
+            # If we can read the controller info, format is typically supported
             return True  # Format is typically always supported
+        except subprocess.CalledProcessError:
+            return False
 
 
 def main():

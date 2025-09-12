@@ -81,7 +81,7 @@ class WipePlanner:
             
             # Try to read device info to ensure it's accessible
             result = subprocess.run(
-                ["nvme", "id-ctrl", device_path, "--output-format=json"],
+                ["sudo", "nvme", "id-ctrl", device_path, "--output-format=json"],
                 capture_output=True,
                 text=True,
                 timeout=5
@@ -151,20 +151,20 @@ class WipePlanner:
         
         if method == "crypto_erase":
             return {
-                "command": "nvme",
-                "args": ["format", device_path, "--ses=2"],  # crypto erase
+                "command": "sudo",
+                "args": ["nvme", "format", device_path, "--ses=2"],  # crypto erase
                 "description": f"Crypto erase on {device_path}"
             }
         elif method == "secure_erase":
             return {
-                "command": "nvme",
-                "args": ["format", device_path, "--ses=1"],  # secure erase
+                "command": "sudo",
+                "args": ["nvme", "format", device_path, "--ses=1"],  # secure erase
                 "description": f"Secure erase on {device_path}"
             }
         elif method == "format":
             return {
-                "command": "nvme",
-                "args": ["format", device_path],  # basic format
+                "command": "sudo",
+                "args": ["nvme", "format", device_path],  # basic format
                 "description": f"Format on {device_path}"
             }
         else:
