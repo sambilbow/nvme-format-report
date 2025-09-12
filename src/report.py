@@ -106,6 +106,9 @@ class ReportGenerator:
         pdf_path = self.report_dir / pdf_filename
         pdf_path.parent.mkdir(exist_ok=True)
         
+        # Get device information
+        device = collect_data["devices"][0]
+        
         # Create PDF document with metadata
         doc = SimpleDocTemplate(
             str(pdf_path), 
@@ -223,7 +226,6 @@ class ReportGenerator:
         
         # Device Information
         story.append(Paragraph("Device Information", styles['Heading2']))
-        device = collect_data["devices"][0]
         device_table_data = [
             ["Model:", device["model"]],
             ["Serial Number:", device["serial"]],
