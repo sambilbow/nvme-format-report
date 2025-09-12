@@ -10,7 +10,7 @@ run = "python -m src.main workflow"
 description = "Run the full workflow"
 
 [tasks.export]
-run = "DRIVE=$(gum choose $(lsblk --noheadings --raw -o NAME,SIZE,TYPE,MOUNTPOINT | grep 'part' | awk '{print \"/dev/\" $1 \"\"}' | grep -v 'loop')) && sudo mkdir -p /mnt/usb && sudo mount $DRIVE /mnt/usb && sudo cp build/wipe_report_*.pdf /mnt/usb && sudo cp build/wipe_report_*.json /mnt/usb && sudo umount /mnt/usb"
+run = "DRIVE=$(gum choose --header 'Select drive to export to' $(lsblk --noheadings --raw -o NAME,SIZE,TYPE,MOUNTPOINT | grep 'part' | awk '{print \"/dev/\" $1 \"\"}' | grep -v 'loop')) && echo '📁 Selected USB drive: $DRIVE' && sudo mkdir -p /mnt/usb && echo '📂 Created mount point' && sudo mount $DRIVE /mnt/usb && echo '🔗 Mounted USB drive' && sudo cp build/wipe_report_*.pdf /mnt/usb && echo '📄 Copied PDF reports' && sudo cp build/wipe_report_*.json /mnt/usb && echo '📋 Copied JSON reports' && sudo umount /mnt/usb && echo '✅ Export completed successfully!'"
 description = "Export the report to a USB drive"
 
 [tasks.cleanup]

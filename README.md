@@ -33,7 +33,12 @@ mise setup
 ### Usage
 
 ```bash
+# Collect info, plan erasure, format device, generate report.
 mise engage
+# Export to USB drive.
+mise export
+# Power down host.
+sudo shutdown -h now
 ```
 
 ## Workflow
