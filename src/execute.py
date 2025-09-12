@@ -167,8 +167,6 @@ class WipeExecutor:
 
 def main():
     """Main function for execute phase."""
-    print("Starting wipe execution...")
-    
     state_manager = StateManager()
     executor = WipeExecutor(state_manager)
     
