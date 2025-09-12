@@ -51,6 +51,15 @@ class WipeExecutor:
                 erase_operation.status = "completed"
                 erase_operation.duration_ms = int(erase_operation.duration * 1000)
                 print("✅ Wipe completed successfully!")
+                
+                # Verify wipe by analyzing device data
+                verification = self.verify_wipe(device["path"], execution_plan["erase_method"])
+                result["verification"] = verification
+                
+                if verification["success"] and verification["wipe_effective"]:
+                    print(f"✅ Verification passed: {verification['zero_percentage']}% zeros, {verification['expected_result']} expected")
+                else:
+                    print(f"⚠️  Verification warning: {verification.get('error', 'Wipe may not be fully effective')}")
             else:
                 erase_operation.status = "failed"
                 erase_operation.error_message = result["error"]
@@ -122,18 +131,17 @@ class WipeExecutor:
                 "error": f"Unexpected error: {str(e)}"
             }
     
-    def verify_wipe(self, device_path: str) -> Dict[str, Any]:
-        """Verify that the wipe was successful by checking for non-zero data."""
+    def verify_wipe(self, device_path: str, erase_method: str = "format") -> Dict[str, Any]:
+        """Verify that the wipe was successful by analyzing device data."""
         print("Verifying wipe completion...")
         
         try:
-            # Read a sample of data from the device
-            # This is a basic check - in practice, you might want to check specific sectors
+            # Read sample data from device (100MB for better verification)
             result = subprocess.run(
-                ["dd", f"if={device_path}", "bs=1M", "count=1", "status=none"],
+                ["sudo", "dd", f"if={device_path}", "bs=1M", "count=100", "status=none"],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=60
             )
             
             if result.returncode != 0:
@@ -142,15 +150,42 @@ class WipeExecutor:
                     "error": "Failed to read device for verification"
                 }
             
-            # Check if the data is all zeros
-            data = result.stdout
-            is_all_zeros = all(byte == '\x00' for byte in data)
+            # Convert to binary data for analysis
+            data = result.stdout.encode('latin-1')
+            total_bytes = len(data)
+            
+            # Count non-zero bytes
+            non_zero_bytes = sum(1 for b in data if b != 0)
+            zero_bytes = total_bytes - non_zero_bytes
+            zero_percentage = round((zero_bytes / total_bytes) * 100, 2)
+            
+            # Get hexdump sample (first 64 bytes)
+            hexdump_sample = data[:64].hex()
+            
+            # Determine expected result based on erase method
+            if erase_method == "secure_erase":
+                # Secure erase should result in mostly zeros
+                wipe_effective = non_zero_bytes < (total_bytes * 0.01)  # Less than 1% non-zero
+                expected_result = "zeros"
+            elif erase_method == "crypto_erase":
+                # Crypto erase should result in random data (not all zeros)
+                wipe_effective = non_zero_bytes > (total_bytes * 0.5)  # More than 50% non-zero
+                expected_result = "random"
+            else:  # format
+                # Basic format - should be mostly zeros
+                wipe_effective = non_zero_bytes < (total_bytes * 0.01)  # Less than 1% non-zero
+                expected_result = "zeros"
             
             return {
                 "success": True,
-                "is_all_zeros": is_all_zeros,
-                "sample_size": len(data),
-                "verification_method": "dd_sample_check"
+                "total_bytes": total_bytes,
+                "zero_bytes": zero_bytes,
+                "non_zero_bytes": non_zero_bytes,
+                "zero_percentage": zero_percentage,
+                "expected_result": expected_result,
+                "wipe_effective": wipe_effective,
+                "hexdump_sample": hexdump_sample,
+                "verification_method": "dd_analysis"
             }
             
         except subprocess.TimeoutExpired:
