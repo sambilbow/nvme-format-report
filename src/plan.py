@@ -152,19 +152,19 @@ class WipePlanner:
         if method == "crypto_erase":
             return {
                 "command": "sudo",
-                "args": ["nvme", "format", device_path, "--ses=2"],  # crypto erase
+                "args": ["nvme", "format", device_path, "--ses=2", "--force"],  # crypto erase
                 "description": f"Crypto erase on {device_path}"
             }
         elif method == "secure_erase":
             return {
                 "command": "sudo",
-                "args": ["nvme", "format", device_path, "--ses=1"],  # secure erase
+                "args": ["nvme", "format", device_path, "--ses=1", "--force"],  # secure erase
                 "description": f"Secure erase on {device_path}"
             }
         elif method == "format":
             return {
                 "command": "sudo",
-                "args": ["nvme", "format", device_path],  # basic format
+                "args": ["nvme", "format", device_path, "--force"],  # basic format
                 "description": f"Format on {device_path}"
             }
         else:

@@ -25,6 +25,11 @@ class EraseOperation(BaseModel):
     status: str = "pending"  # pending, running, completed, failed
     error_message: Optional[str] = None
 
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
+
 
 class DataAnalysis(BaseModel):
     """Data analysis results."""
