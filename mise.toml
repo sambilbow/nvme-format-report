@@ -1,26 +1,18 @@
 [env]
 _.python.venv = { path = ".venv", create = true }
 
-[tasks.00-dev]
-run = "python -m src.main"
-description = "Run the main entry point for development/testing"
-
-[tasks.01-setup]
+[tasks.setup]
 run = "pip install -r requirements.txt && cp env.template .env && ${EDITOR:-nano} .env"
 description = "Install dependencies, setup environment, and open .env for editing"
 
-[tasks.02-collect]
-run = "python -m src.collect"
-description = "Collect NVMe device information and update state"
+[tasks.engage]
+run = "python -m src.main workflow"
+description = "Run the full workflow"
 
-[tasks.03-plan]
-run = "python -m src.plan"
-description = "Create an execution plan for the NVMe wipe based on collected info"
+[tasks.export]
+run = "DRIVE=$(gum choose $(lsblk -o NAME,SIZE,TYPE,MOUNTPOINT | grep -E 'disk|part' | awk '{print \"/dev/\" $1 \" (\" $2 \")\"}' | grep -v 'loop')) && sudo mkdir /mnt/usb && sudo mount $DRIVE /mnt/usb && cp build/wipe_report_*.pdf /mnt/usb && cp build/wipe_report_*.json /mnt/usb && sudo umount /mnt/usb"
+description = "Export the report to a USB drive"
 
-[tasks.04-execute]
-run = "python -m src.execute"
-description = "Execute the NVMe wipe according to the plan"
-
-[tasks.05-report]
-run = "python -m src.report"
-description = "Generate a report (PDF/JSON) from the results of the wipe"
+[tasks.cleanup]
+run = "rm -rf build/*.pdf && rm -rf build/*.json"
+description = "Cleanup the build directory"
