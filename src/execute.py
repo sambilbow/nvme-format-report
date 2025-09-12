@@ -245,12 +245,6 @@ def _run_execute_phase(executor: WipeExecutor, state_manager: StateManager):
         
         if operation["status"] == "completed":
             print("✅ Wipe completed successfully!")
-            if "verification" in execution_results:
-                verif = execution_results["verification"]
-                if verif["success"]:
-                    print(f"✅ Verification: {verif['zero_percentage']}% zeros, {verif['expected_result']} expected")
-                else:
-                    print(f"⚠️  Verification failed: {verif['error']}")
         else:
             print(f"❌ Wipe failed: {operation['error_message']}")
         
