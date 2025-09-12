@@ -137,14 +137,14 @@ class DeviceCollector:
                 system_info["system_uuid"] = "Unknown"
         
         try:
-            # Get OS information
+            # Get OS information from /etc/os-release
             result = subprocess.run(
-                ["uname", "-a"],
+                ["grep", "PRETTY_NAME", "/etc/os-release"],
                 capture_output=True,
                 text=True,
                 check=True
             )
-            system_info["os_info"] = result.stdout.strip()
+            system_info["os_info"] = result.stdout.split('=')[1].strip('"')
         except:
             system_info["os_info"] = "Unknown"
         
