@@ -22,7 +22,7 @@ class DeviceCollector:
         try:
             print("DEBUG: Running ls /dev/nvme* command...")
             result = subprocess.run(
-                ["ls", "/dev/nvme*"], 
+                "ls /dev/nvme*", 
                 capture_output=True, 
                 text=True, 
                 check=True,
