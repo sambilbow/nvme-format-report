@@ -206,12 +206,22 @@ class WipePlanner:
         return warnings
 
 
+def plan_main_with_state(state_manager: StateManager):
+    """Main function for plan phase with provided state manager."""
+    print("Starting wipe execution planning...")
+    planner = WipePlanner(state_manager)
+    _run_plan_phase(planner, state_manager)
+
 def main():
     """Main function for plan phase."""
     print("Starting wipe execution planning...")
     
     state_manager = StateManager()
     planner = WipePlanner(state_manager)
+    _run_plan_phase(planner, state_manager)
+
+def _run_plan_phase(planner: WipePlanner, state_manager: StateManager):
+    """Run the plan phase logic."""
     
     # Check if collect phase completed
     if state_manager.get_phase_status("collect") != "completed":

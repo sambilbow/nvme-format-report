@@ -5,10 +5,10 @@ import subprocess
 from pathlib import Path
 
 from .state import StateManager
-from .collect import main as collect_main
-from .plan import main as plan_main
-from .execute import main as execute_main
-from .report import main as report_main
+from .collect import main as collect_main, collect_main_with_state
+from .plan import main as plan_main, plan_main_with_state
+from .execute import main as execute_main, execute_main_with_state
+from .report import main as report_main, report_main_with_state
 
 
 def run_full_workflow():
@@ -28,7 +28,7 @@ def run_full_workflow():
     try:
         # Phase 1: Collect
         print("\n📋 Phase 1: Collecting device information...")
-        collect_main()
+        collect_main_with_state(state_manager)
         
         if state_manager.get_phase_status("collect") != "completed":
             print("❌ Collect phase failed. Stopping workflow.")
@@ -36,7 +36,7 @@ def run_full_workflow():
         
         # Phase 2: Plan
         print("\n📋 Phase 2: Creating execution plan...")
-        plan_main()
+        plan_main_with_state(state_manager)
         
         if state_manager.get_phase_status("plan") != "completed":
             print("❌ Plan phase failed. Stopping workflow.")
@@ -51,7 +51,7 @@ def run_full_workflow():
             print("❌ Operation cancelled by user.")
             return False
         
-        execute_main()
+        execute_main_with_state(state_manager)
         
         if state_manager.get_phase_status("execute") != "completed":
             print("❌ Execute phase failed. Stopping workflow.")
@@ -59,7 +59,7 @@ def run_full_workflow():
         
         # Phase 4: Report
         print("\n📋 Phase 4: Generating reports...")
-        report_main()
+        report_main_with_state(state_manager)
         
         if state_manager.get_phase_status("report") != "completed":
             print("❌ Report phase failed.")

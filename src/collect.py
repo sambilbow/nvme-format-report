@@ -238,6 +238,12 @@ class DeviceCollector:
             return False
 
 
+def collect_main_with_state(state_manager: StateManager):
+    """Main function for collect phase with provided state manager."""
+    print("Starting NVMe device collection...")
+    collector = DeviceCollector(state_manager)
+    _run_collect_phase(collector, state_manager)
+
 def main():
     """Main function for collect phase."""
     print("Starting NVMe device collection...")
@@ -250,6 +256,10 @@ def main():
         state_manager = StateManager()
     
     collector = DeviceCollector(state_manager)
+    _run_collect_phase(collector, state_manager)
+
+def _run_collect_phase(collector: DeviceCollector, state_manager: StateManager):
+    """Run the collect phase logic."""
     
     # Update phase status
     state_manager.update_phase("collect", "running")

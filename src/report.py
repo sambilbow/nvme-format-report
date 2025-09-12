@@ -260,12 +260,22 @@ class ReportGenerator:
         return str(pdf_path)
 
 
+def report_main_with_state(state_manager: StateManager):
+    """Main function for report phase with provided state manager."""
+    print("Starting report generation...")
+    generator = ReportGenerator(state_manager)
+    _run_report_phase(generator, state_manager)
+
 def main():
     """Main function for report phase."""
     print("Starting report generation...")
     
     state_manager = StateManager()
     generator = ReportGenerator(state_manager)
+    _run_report_phase(generator, state_manager)
+
+def _run_report_phase(generator: ReportGenerator, state_manager: StateManager):
+    """Run the report phase logic."""
     
     # Check if execute phase completed
     if state_manager.get_phase_status("execute") != "completed":

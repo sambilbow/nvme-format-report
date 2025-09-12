@@ -165,10 +165,19 @@ class WipeExecutor:
             }
 
 
+def execute_main_with_state(state_manager: StateManager):
+    """Main function for execute phase with provided state manager."""
+    executor = WipeExecutor(state_manager)
+    _run_execute_phase(executor, state_manager)
+
 def main():
     """Main function for execute phase."""
     state_manager = StateManager()
     executor = WipeExecutor(state_manager)
+    _run_execute_phase(executor, state_manager)
+
+def _run_execute_phase(executor: WipeExecutor, state_manager: StateManager):
+    """Run the execute phase logic."""
     
     # Check if plan phase completed
     if state_manager.get_phase_status("plan") != "completed":
